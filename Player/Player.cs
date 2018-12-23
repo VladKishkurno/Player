@@ -11,9 +11,18 @@ namespace MyPlayer//.Domain
         private int _volume;
         public Song[] Songarray;
 
+        private bool _playing;
+
         private const int MIN_VOLUME = 0;
         private const int MAX_VOLUME = 100;
 
+        public bool Playing
+        {
+            get
+            {
+                return _playing;
+            }
+        }
         public int Volume
         {
             get
@@ -31,27 +40,36 @@ namespace MyPlayer//.Domain
        public void VolumeUp( Player player)
         {
             player.Volume ++;
+            Console.WriteLine($"Volume is Up: {player.Volume}");
         }
 
         public void VolumeDown(Player player)
         {
             player.Volume --;
+            Console.WriteLine($"Volume is Down: {player.Volume}");
         }
 
         public void VolumeChage(int step)
         {
             Volume += step;
+            Console.WriteLine($"Volume is Change: {Volume}");
         }
 
-        void Lock()
-        { }
+        //public void Lock( Player player)
+        //{
+        //    player.Playing = false;
+        //    Console.WriteLine($"Player is locked: {player.Playing}");
+        //}
 
-        void UnLock()
-        { }
+        //public void UnLock( Player player) 
+        //{
+        //    player.Playing = true;
+        //    Console.WriteLine($"Player is UnLocked: {player.Playing}");
+        //}
 
         public void Play()
         {
-            Console.WriteLine("Player is playing ");
+            Console.WriteLine($"Player is playing: {Songarray[0].Name} ");
         }
 
         public void Stop()

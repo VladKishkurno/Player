@@ -13,7 +13,9 @@ namespace MyPlayer
 
 
         public Artist()
-        { }
+        {
+            this.Name = "No Name";
+        }
 
         public Artist( string Name )
         {
