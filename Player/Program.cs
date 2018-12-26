@@ -146,19 +146,19 @@ namespace MyPlayer
         {
             player.Songarray = GetSongsDate();
 
-            player.VolumeUp(player);
-            player.VolumeDown(player);
+            player.VolumeUp();
+            player.VolumeDown();
             player.VolumeChage(51);
 
             //Console.WriteLine(player.Playing);
 
-            player.Lock(player);
-            player.Stop(player);
-            player.Play(player);
-            player.UnLock(player);
+            player.Lock();
+            player.Stop();
+            player.Play();
+            player.UnLock();
 
-            player.Stop(player);
-            player.Play(player);
+            player.Stop();
+            player.Play();
         }
     }
 

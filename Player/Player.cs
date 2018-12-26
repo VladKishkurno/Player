@@ -39,16 +39,16 @@ namespace MyPlayer//.Domain
             }
         }
 
-       public void VolumeUp( Player player)
+       public void VolumeUp()
         {
-            player.Volume ++;
-            Console.WriteLine($"Volume is Up: {player.Volume}");
+            Volume ++;
+            Console.WriteLine($"Volume is Up: {Volume}");
         }
 
-        public void VolumeDown(Player player)
+        public void VolumeDown()
         {
-            player.Volume --;
-            Console.WriteLine($"Volume is Down: {player.Volume}");
+            Volume --;
+            Console.WriteLine($"Volume is Down: {Volume}");
         }
 
         public void VolumeChage(int step)
@@ -57,33 +57,33 @@ namespace MyPlayer//.Domain
             Console.WriteLine($"Volume is Change: {Volume}");
         }
 
-        public void Lock(Player player)
+        public void Lock()
         {
-            player.Locked = true;
-            Console.WriteLine($"Player is locked: {player.Locked}");
+            Locked = true;
+            Console.WriteLine($"Player is locked: ");
         }
 
-        public void UnLock(Player player)
+        public void UnLock()
         {
-            player.Locked = false;
-            Console.WriteLine($"Player is UnLocked: {player.Locked}");
+            Locked = false;
+            Console.WriteLine($"Player is UnLocked:");
         }
 
-        public void Play(Player player)
+        public void Play()
         {
             if (Locked != true)
             {
-                player._playing = true;
+                _playing = true;
                 Console.WriteLine($"Player is playing: {Songarray[0].Name} ");
             }
             else Console.WriteLine($"Player is Locked");
         }
 
-        public void Stop(Player player)
+        public void Stop()
         {
             if (Locked != true)
             {
-                player._playing = false;
+                _playing = false;
                 Console.WriteLine("Player is stoped");
             }
             else Console.WriteLine($"Player is Locked");
