@@ -11,7 +11,7 @@ namespace MyPlayer//.Domain
         private int _volume;
         public Song[] Songarray;
 
-        public bool Locked;
+        private bool _locked;
 
         private bool _playing;
 
@@ -41,37 +41,50 @@ namespace MyPlayer//.Domain
 
        public void VolumeUp()
         {
-            Volume ++;
-            Console.WriteLine($"Volume is Up: {Volume}");
+            if (_locked != true)
+            {
+                Volume++;
+                Console.WriteLine($"Volume is Up: {Volume}");
+            }
+            else Console.WriteLine($"Player is Locked");
         }
 
         public void VolumeDown()
         {
-            Volume --;
-            Console.WriteLine($"Volume is Down: {Volume}");
+            if (_locked != true)
+            {
+                Volume--;
+                Console.WriteLine($"Volume is Down: {Volume}");
+            }
+            else Console.WriteLine($"Player is Locked");
         }
+        
 
         public void VolumeChage(int step)
         {
-            Volume += step;
-            Console.WriteLine($"Volume is Change: {Volume}");
+            if (_locked != true)
+            {
+                Volume += step;
+                Console.WriteLine($"Volume is Change: {Volume}");
+            }
+            else Console.WriteLine($"Player is Locked");
         }
 
         public void Lock()
         {
-            Locked = true;
-            Console.WriteLine($"Player is locked: ");
+            _locked = true;
+            Console.WriteLine($"Player is locked ");
         }
 
         public void UnLock()
         {
-            Locked = false;
-            Console.WriteLine($"Player is UnLocked:");
+            _locked = false;
+            Console.WriteLine($"Player is Unlocked");
         }
 
         public void Play()
         {
-            if (Locked != true)
+            if (_locked != true)
             {
                 _playing = true;
                 Console.WriteLine($"Player is playing: {Songarray[0].Name} ");
@@ -81,7 +94,7 @@ namespace MyPlayer//.Domain
 
         public void Stop()
         {
-            if (Locked != true)
+            if (_locked != true)
             {
                 _playing = false;
                 Console.WriteLine("Player is stoped");

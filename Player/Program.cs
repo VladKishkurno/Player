@@ -153,6 +153,7 @@ namespace MyPlayer
             //Console.WriteLine(player.Playing);
 
             player.Lock();
+           // player.VolumeUp();
             player.Stop();
             player.Play();
             player.UnLock();
