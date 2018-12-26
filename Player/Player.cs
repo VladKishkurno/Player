@@ -9,7 +9,7 @@ namespace MyPlayer//.Domain
     class Player
     {
         private int _volume;
-        public Song[] Songarray;
+        public Song[] Songarray { get; private set; }
 
         private bool _locked;
 
@@ -17,6 +17,11 @@ namespace MyPlayer//.Domain
 
         private const int MIN_VOLUME = 0;
         private const int MAX_VOLUME = 100;
+
+        public void Add(params Song[] songs)
+        {
+            Songarray = songs;
+        }
 
         public bool Playing
         {
@@ -87,7 +92,11 @@ namespace MyPlayer//.Domain
             if (_locked != true)
             {
                 _playing = true;
-                Console.WriteLine($"Player is playing: {Songarray[0].Name} ");
+                for (int i = 0; i < Songarray.Length; i++)
+                {
+                    Console.WriteLine($"Player is playing: {Songarray[i].Name} + {Songarray[i].Duration} ");
+                    //System.Threading.Thread.Sleep(1000);
+                }
             }
             else Console.WriteLine($"Player is Locked");
         }

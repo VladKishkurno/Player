@@ -8,11 +8,13 @@ namespace MyPlayer
 {
     class Program
     {
-        public static Song[] GetSongsDate()
+        public static Song[] GetSongsDate( ref int totalDuration, out int maxDuration, out int minDuration )
         {
             var artist = new Artist();
             var album = new Album();
 
+            minDuration = 1000;
+            maxDuration = 0;
 
             //artist.Name = "Sabaton";
             //artist.Ganre = "Rock";
@@ -28,14 +30,27 @@ namespace MyPlayer
             album.name = "No";
             album.year = 2015;
 
-            var song = new Song
+            var songs = new Song[10];
+
+            var random = new Random();
+
+
+            for (int i = 0; i < 10; i++)
             {
-                Duration = 150,
-                Name = "Sabaton",
-                Album = album,
-                Artist = artist
-            };
-            return new Song[] { song };
+                var song = new Song
+                {
+                    Duration = random.Next(1000),
+                    Name = $"New song {i}",
+                    Album = album,
+                    Artist = artist
+                };
+                songs[i] = song;
+                totalDuration += song.Duration;
+                if (song.Duration < minDuration) minDuration = song.Duration;
+                maxDuration = Math.Max(maxDuration, song.Duration);
+            }
+
+            return songs;
         }
 
         public static void TraceInfo( Player player)
@@ -46,7 +61,7 @@ namespace MyPlayer
             Console.WriteLine(player.Volume);
         }
 
-        static Song CreateDefaultSong()
+        static Song CreateSong()
         {
             var NewSong = new Song();
             Random rand = new Random();
@@ -58,6 +73,10 @@ namespace MyPlayer
             NewSong.Artist = new Artist();
 
             return NewSong;
+
+
+
+           // return new Song { Name = "default", Duration = 120 }; альтернативная запись 
         }
 
         //static void CreateSAA()
@@ -73,7 +92,7 @@ namespace MyPlayer
 
         //}
 
-        static Song CreateNamedSong(string name)
+        static Song CreateSong(string name)
         {
             var NewSong = new Song();
             Random rand = new Random();
@@ -111,13 +130,15 @@ namespace MyPlayer
 
             Song song1, song2, song3;
 
-            song1 = CreateDefaultSong();
+            song1 = CreateSong();
             Console.WriteLine($"\nName : {song1.Name} \nDuration : {song1.Duration} \nArtist :{song1.Artist.Name} \nAlbum : {song1.Album.name}");
-            song2 = CreateNamedSong("Named song");
+            song2 = CreateSong("Named song");
             Console.WriteLine($"\nName : {song2.Name} \nDuration : {song2.Duration} \nArtist : {song2.Artist.Name} \nAlbum : {song2.Album.name}");
             song3 = CreatSong("Named song 2", 123, album, artist);
             Console.WriteLine($"\nName : {song3.Name} \nDuration : {song3.Duration} \nArtist : {song3.Artist.Name} \nAlbum : {song3.Album.name}");
 
+            player.Add(song1, song2, song3);
+            player.Play();
            // CreateSAA();
             //var song = new Song();
 
@@ -144,8 +165,10 @@ namespace MyPlayer
 
         static void TestVolume(Player player)
         {
-            player.Songarray = GetSongsDate();
-
+             int totalDuration = 0;
+             int  maxDuration = 0;
+            player.Add(GetSongsDate(ref totalDuration, out maxDuration, out int minDuration));
+            Console.WriteLine($"Total {totalDuration} {minDuration} {maxDuration}");
             player.VolumeUp();
             player.VolumeDown();
             player.VolumeChage(51);
