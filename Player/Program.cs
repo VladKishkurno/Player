@@ -104,6 +104,8 @@ namespace MyPlayer
         {
             var player = new Player();
 
+            TestVolume(player); // недостающая домашка
+
             var artist = new Artist();
             var album = new Album();
 
@@ -132,8 +134,7 @@ namespace MyPlayer
             // player.Stop();
             ////// TraceInfo(player);
 
-            // player.Lock(player);
-            // player.UnLock(player);
+
 
             //player.Playing = false;
 
@@ -149,10 +150,15 @@ namespace MyPlayer
             player.VolumeDown(player);
             player.VolumeChage(51);
 
-            Console.WriteLine(player.Playing);
+            //Console.WriteLine(player.Playing);
 
-            player.Stop();
-            player.Play();
+            player.Lock(player);
+            player.Stop(player);
+            player.Play(player);
+            player.UnLock(player);
+
+            player.Stop(player);
+            player.Play(player);
         }
     }
 

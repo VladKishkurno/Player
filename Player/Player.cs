@@ -11,6 +11,8 @@ namespace MyPlayer//.Domain
         private int _volume;
         public Song[] Songarray;
 
+        public bool Locked;
+
         private bool _playing;
 
         private const int MIN_VOLUME = 0;
@@ -55,26 +57,36 @@ namespace MyPlayer//.Domain
             Console.WriteLine($"Volume is Change: {Volume}");
         }
 
-        //public void Lock( Player player)
-        //{
-        //    player.Playing = false;
-        //    Console.WriteLine($"Player is locked: {player.Playing}");
-        //}
-
-        //public void UnLock( Player player) 
-        //{
-        //    player.Playing = true;
-        //    Console.WriteLine($"Player is UnLocked: {player.Playing}");
-        //}
-
-        public void Play()
+        public void Lock(Player player)
         {
-            Console.WriteLine($"Player is playing: {Songarray[0].Name} ");
+            player.Locked = true;
+            Console.WriteLine($"Player is locked: {player.Locked}");
         }
 
-        public void Stop()
+        public void UnLock(Player player)
         {
-            Console.WriteLine("Player is stoped");
+            player.Locked = false;
+            Console.WriteLine($"Player is UnLocked: {player.Locked}");
+        }
+
+        public void Play(Player player)
+        {
+            if (Locked != true)
+            {
+                player._playing = true;
+                Console.WriteLine($"Player is playing: {Songarray[0].Name} ");
+            }
+            else Console.WriteLine($"Player is Locked");
+        }
+
+        public void Stop(Player player)
+        {
+            if (Locked != true)
+            {
+                player._playing = false;
+                Console.WriteLine("Player is stoped");
+            }
+            else Console.WriteLine($"Player is Locked");
         }
 
 
