@@ -166,11 +166,30 @@ namespace MyPlayer
 
         public static List<Song>  SortByTitle( Player player)
         {
+            string[] list = new string[player.Songs.Count];
             var newSongCollection = new List<Song>();
-            player.Songs.Sort();
+            //player.Songs.Sort();
 
+            //foreach (var item in player.Songs)
+            //    newSongCollection.Add(item);
+            int i = 0;
             foreach (var item in player.Songs)
-                newSongCollection.Add(item);
+            {
+                list[i] = item.Name;
+                i++;
+            }
+            Array.Sort(list);
+
+            
+            for(int j = 0; j < list.Length; j++ )
+            {
+                foreach (var item in player.Songs)
+                {
+                    if (list[j] == item.Name)
+                        if(!newSongCollection.Contains(item))
+                            newSongCollection.Add(item);
+                }
+            }
 
             for (int j = player.Songs.Count - 1; j >= 0; j--)
                 player.Songs.RemoveAt(j);
