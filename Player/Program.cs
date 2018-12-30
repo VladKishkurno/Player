@@ -8,7 +8,7 @@ namespace MyPlayer
 {
     class Program
     {
-        public static Song[] GetSongsDate( ref int totalDuration, out int maxDuration, out int minDuration )
+      public static List<Song> GetSongsDate( ref int totalDuration, out int maxDuration, out int minDuration )
         {
             var artist = new Artist();
             var album = new Album();
@@ -20,34 +20,50 @@ namespace MyPlayer
             //artist.Ganre = "Rock";
 
             //var artist = new Artist();
-            var artist2 = new Artist("Rammstain");
-            var artist3 = new Artist("Rammstain", "Rock");
+            //var artist2 = new Artist("Rammstain");
+            //var artist3 = new Artist("Rammstain", "Rock");
 
-            Console.WriteLine(artist.Name);
-            Console.WriteLine(artist2.Name);
-            Console.WriteLine($"{artist3.Name}   {artist3.Ganre}");
+            //Console.WriteLine(artist.Name);
+            //Console.WriteLine(artist2.Name);
+            //Console.WriteLine($"{artist3.Name}   {artist3.Ganre}");
 
-            album.name = "No";
-            album.year = 2015;
+            //album.name = "No";
+            //album.year = 2015;
 
-            var songs = new Song[10];
+            //var songs = new Song[10];
 
+            //var random = new Random();
+
+
+            //for (int i = 0; i < 10; i++)
+            //{
+            //    var song = new Song
+            //    {
+            //        Duration = random.Next(1000),
+            //        Name = $"New song {i}",
+            //        Album = album,
+            //        Artist = artist
+            //    };
+            //    songs[i] = song;
+            //    totalDuration += song.Duration;
+            //    if (song.Duration < minDuration) minDuration = song.Duration;
+            //    maxDuration = Math.Max(maxDuration, song.Duration);
+            //}
+            var songs = new List<Song>();
             var random = new Random();
-
 
             for (int i = 0; i < 10; i++)
             {
-                var song = new Song
-                {
-                    Duration = random.Next(1000),
-                    Name = $"New song {i}",
+                songs.Add(new Song
+                { Duration = random.Next(1000),
+                    Name = $"New song {random.Next(0, 10)}",
+                    Lirics = $"New lirics {random.Next(0, 100)}",
                     Album = album,
                     Artist = artist
-                };
-                songs[i] = song;
-                totalDuration += song.Duration;
-                if (song.Duration < minDuration) minDuration = song.Duration;
-                maxDuration = Math.Max(maxDuration, song.Duration);
+                });
+                totalDuration += songs[i].Duration;
+                if (songs[i].Duration < minDuration) minDuration = songs[i].Duration;
+                maxDuration = Math.Max(maxDuration, songs[i].Duration);
             }
 
             return songs;
@@ -55,10 +71,16 @@ namespace MyPlayer
 
         public static void TraceInfo( Player player)
         {
-            Console.WriteLine(player.Songarray[0].Artist.Name);
-            Console.WriteLine(player.Songarray[0].Duration);
-            Console.WriteLine(player.Songarray.Length);
+            Console.WriteLine(player.Songs[0].Artist.Name);
+            Console.WriteLine(player.Songs[0].Duration);
+            Console.WriteLine(player.Songs.Count);
             Console.WriteLine(player.Volume);
+        }
+
+        public static void PrintName(Player player)
+        {
+            foreach(var item in player.Songs)
+            Console.WriteLine($" {item.Name} , {item.Lirics}");
         }
 
         static Song CreateSong()
@@ -119,27 +141,102 @@ namespace MyPlayer
             return NewSong;
         }
 
+        static List<Song> Shuffle(Player player)
+        {
+            var newSongCollection = new List<Song>();
+
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = i; j < player.Songs.Count;)
+                {
+                    newSongCollection.Add(player.Songs[j]);
+                    j += 3;
+                }
+            }
+            for (int j = player.Songs.Count - 1; j >= 0; j--)
+                player.Songs.RemoveAt(j);
+               
+            Console.WriteLine();
+            //foreach(var item in newSongCollection)
+            //{
+            //    Console.WriteLine(item.Name);
+            //}
+            return newSongCollection;
+        }
+
+        public static List<Song>  SortByTitle( Player player)
+        {
+            var newSongCollection = new List<Song>();
+            player.Songs.Sort();
+
+            foreach (var item in player.Songs)
+                newSongCollection.Add(item);
+
+            for (int j = player.Songs.Count - 1; j >= 0; j--)
+                player.Songs.RemoveAt(j);
+
+            return newSongCollection;
+        }
+
         static void Main(string[] args)
         {
+            bool loop = false;
             var player = new Player();
 
-            TestVolume(player); // недостающая домашка
+           
 
             var artist = new Artist();
             var album = new Album();
+            List<Song> songs = new List<Song>();
+            
+            //songs.Add(CreateSong());
+           // songs.Add(CreateSong("Named song"));
+           // songs.Add(CreatSong("Named song 2", 123, album, artist));
 
-            Song song1, song2, song3;
+            player.Add(songs);
 
-            song1 = CreateSong();
-            Console.WriteLine($"\nName : {song1.Name} \nDuration : {song1.Duration} \nArtist :{song1.Artist.Name} \nAlbum : {song1.Album.name}");
-            song2 = CreateSong("Named song");
-            Console.WriteLine($"\nName : {song2.Name} \nDuration : {song2.Duration} \nArtist : {song2.Artist.Name} \nAlbum : {song2.Album.name}");
-            song3 = CreatSong("Named song 2", 123, album, artist);
-            Console.WriteLine($"\nName : {song3.Name} \nDuration : {song3.Duration} \nArtist : {song3.Artist.Name} \nAlbum : {song3.Album.name}");
+            //TestVolume(player); // 
+            int totalDuration = 0;
+            int maxDuration = 0;
+            player.Add(GetSongsDate(ref totalDuration, out maxDuration, out int minDuration));
 
-            player.Add(song1, song2, song3);
-            player.Play();
-           // CreateSAA();
+            Console.WriteLine("Что было создано");
+            player.Play(loop);
+
+
+            Console.WriteLine("Отсортированный");
+            player.Add(SortByTitle(player));
+            Console.WriteLine();
+            //PrintName(player);
+            player.Play(loop);
+
+
+            Console.WriteLine("После перемешивания");
+            player.Add(Shuffle(player));
+
+            player.Play(loop);
+
+            //PrintName(player);
+
+            //player.Add(SortByTitle(player));
+
+           // player.Play(loop);
+            //PrintName(player);
+            //song1 = CreateSong();
+            //Console.WriteLine($"\nName : {song1.Name} \nDuration : {song1.Duration} \nArtist :{song1.Artist.Name} \nAlbum : {song1.Album.name}");
+            //song2 = CreateSong("Named song");
+            //Console.WriteLine($"\nName : {song2.Name} \nDuration : {song2.Duration} \nArtist : {song2.Artist.Name} \nAlbum : {song2.Album.name}");
+            //song3 = CreatSong("Named song 2", 123, album, artist);
+            //song3.Lirics = "Lirics";
+            //Console.WriteLine($"\nName : {song3.Name} \nDuration : {song3.Duration} \nArtist : {song3.Artist.Name} \nAlbum : {song3.Album.name}");
+
+
+
+            //player.Add(song1);
+            //player.Add(song1, song2);
+            //player.Add(song1, song2, song3);
+            //player.Play();
+            // CreateSAA();
             //var song = new Song();
 
             //// player.Play();
@@ -165,8 +262,9 @@ namespace MyPlayer
 
         static void TestVolume(Player player)
         {
-             int totalDuration = 0;
-             int  maxDuration = 0;
+            bool loop =  false;
+            int totalDuration = 0;
+            int maxDuration = 0;
             player.Add(GetSongsDate(ref totalDuration, out maxDuration, out int minDuration));
             Console.WriteLine($"Total {totalDuration} {minDuration} {maxDuration}");
             player.VolumeUp();
@@ -176,13 +274,14 @@ namespace MyPlayer
             //Console.WriteLine(player.Playing);
 
             player.Lock();
-           // player.VolumeUp();
+            // player.VolumeUp();
             player.Stop();
-            player.Play();
+            player.Play(loop);
             player.UnLock();
 
+            //loop = true;
             player.Stop();
-            player.Play();
+            player.Play(loop);
         }
     }
 

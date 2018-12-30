@@ -9,7 +9,8 @@ namespace MyPlayer//.Domain
     class Player
     {
         private int _volume;
-        public Song[] Songarray { get; private set; }
+        //public Song[] Songarray { get; private set; }
+        public List<Song> Songs{ get; private set;}
 
         private bool _locked;
 
@@ -18,9 +19,11 @@ namespace MyPlayer//.Domain
         private const int MIN_VOLUME = 0;
         private const int MAX_VOLUME = 100;
 
-        public void Add(params Song[] songs)
+        public void Add(List<Song> songs)
         {
-            Songarray = songs;
+            if (Songs == null) Songs = new List<Song>();
+            foreach (var item in songs)
+                Songs.Add(item);
         }
 
         public bool Playing
@@ -87,15 +90,23 @@ namespace MyPlayer//.Domain
             Console.WriteLine($"Player is Unlocked");
         }
 
-        public void Play()
+        public void Play(bool loop)
         {
             if (_locked != true)
             {
+                int numLoop = 0;
                 _playing = true;
-                for (int i = 0; i < Songarray.Length; i++)
+                if (loop == false) numLoop = 1;
+                else numLoop = 5;
+
+                for(int j = 0; j < numLoop; j++)
                 {
-                    Console.WriteLine($"Player is playing: {Songarray[i].Name} + {Songarray[i].Duration} ");
-                    //System.Threading.Thread.Sleep(1000);
+                    for (int i = 0; i < Songs.Count; i++)
+                    {
+                        Console.WriteLine($"Player is playing: {Songs[i].Name} , {Songs[i].Lirics} ");
+                        //System.Threading.Thread.Sleep(1000);
+                    }
+                    
                 }
             }
             else Console.WriteLine($"Player is Locked");
@@ -110,6 +121,7 @@ namespace MyPlayer//.Domain
             }
             else Console.WriteLine($"Player is Locked");
         }
+
 
 
     }
