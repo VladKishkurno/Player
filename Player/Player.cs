@@ -10,7 +10,7 @@ namespace MyPlayer//.Domain
     {
         private int _volume;
         //public Song[] Songarray { get; private set; }
-        public List<Song> Songs{ get; private set;}
+        public List<Song> Songs { get; private set; } = new List<Song>();
 
         private bool _locked;
 
@@ -21,9 +21,8 @@ namespace MyPlayer//.Domain
 
         public void Add(List<Song> songs)
         {
-            if (Songs == null) Songs = new List<Song>();
-            foreach (var item in songs)
-                Songs.Add(item);
+             if (Songs == null) Songs = new List<Song>();
+             Songs.AddRange(songs);
         }
 
         public bool Playing
@@ -96,17 +95,15 @@ namespace MyPlayer//.Domain
             {
                 int numLoop = 0;
                 _playing = true;
-                if (loop == false) numLoop = 1;
-                else numLoop = 5;
+                //if (loop == false) numLoop = 1;
+                //else numLoop = 5;
+                numLoop = (loop == false) ? 1 : 5;
 
                 for(int j = 0; j < numLoop; j++)
                 {
-                    for (int i = 0; i < Songs.Count; i++)
-                    {
-                        Console.WriteLine($"Player is playing: {Songs[i].Name} , {Songs[i].Lirics} ");
-                        //System.Threading.Thread.Sleep(1000);
-                    }
-                    
+                    foreach(var item in Songs)
+                        Console.WriteLine($"Player is playing: {item.Name} , {item.Lirics} ");
+                                        
                 }
             }
             else Console.WriteLine($"Player is Locked");
@@ -122,7 +119,27 @@ namespace MyPlayer//.Domain
             else Console.WriteLine($"Player is Locked");
         }
 
+        public void Shuffle()
+        {
+            var newSongCollection = new List<Song>();
 
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = i; j < this.Songs.Count;)
+                {
+                    newSongCollection.Add(this.Songs[j]);
+                    j += 3;
+                }
+            }
+
+            this.Songs = newSongCollection;
+            Console.WriteLine();
+        }
+
+        public  void SortByTitle()
+        {
+            this.Songs.Sort();
+        }
 
     }
 }

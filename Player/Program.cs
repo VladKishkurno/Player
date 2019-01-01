@@ -141,62 +141,6 @@ namespace MyPlayer
             return NewSong;
         }
 
-        static List<Song> Shuffle(Player player)
-        {
-            var newSongCollection = new List<Song>();
-
-            for (int i = 0; i < 3; i++)
-            {
-                for (int j = i; j < player.Songs.Count;)
-                {
-                    newSongCollection.Add(player.Songs[j]);
-                    j += 3;
-                }
-            }
-            for (int j = player.Songs.Count - 1; j >= 0; j--)
-                player.Songs.RemoveAt(j);
-               
-            Console.WriteLine();
-            //foreach(var item in newSongCollection)
-            //{
-            //    Console.WriteLine(item.Name);
-            //}
-            return newSongCollection;
-        }
-
-        public static List<Song>  SortByTitle( Player player)
-        {
-            string[] list = new string[player.Songs.Count];
-            var newSongCollection = new List<Song>();
-            //player.Songs.Sort();
-
-            //foreach (var item in player.Songs)
-            //    newSongCollection.Add(item);
-            int i = 0;
-            foreach (var item in player.Songs)
-            {
-                list[i] = item.Name;
-                i++;
-            }
-            Array.Sort(list);
-
-            
-            for(int j = 0; j < list.Length; j++ )
-            {
-                foreach (var item in player.Songs)
-                {
-                    if (list[j] == item.Name)
-                        if(!newSongCollection.Contains(item))
-                            newSongCollection.Add(item);
-                }
-            }
-
-            for (int j = player.Songs.Count - 1; j >= 0; j--)
-                player.Songs.RemoveAt(j);
-
-            return newSongCollection;
-        }
-
         static void Main(string[] args)
         {
             bool loop = false;
@@ -212,7 +156,7 @@ namespace MyPlayer
            // songs.Add(CreateSong("Named song"));
            // songs.Add(CreatSong("Named song 2", 123, album, artist));
 
-            player.Add(songs);
+            //player.Add(songs);
 
             //TestVolume(player); // 
             int totalDuration = 0;
@@ -224,14 +168,16 @@ namespace MyPlayer
 
 
             Console.WriteLine("Отсортированный");
-            player.Add(SortByTitle(player));
+            player.SortByTitle();
+            //player.Add(SortByTitle(player));
             Console.WriteLine();
             //PrintName(player);
             player.Play(loop);
 
 
             Console.WriteLine("После перемешивания");
-            player.Add(Shuffle(player));
+            //player.Add(Shuffle(player));
+            player.Shuffle();
 
             player.Play(loop);
 
