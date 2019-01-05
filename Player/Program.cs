@@ -51,6 +51,7 @@ namespace MyPlayer
             //}
             var songs = new List<Song>();
             var random = new Random();
+            var ganres = new List<Ganre> { Ganre.None};
 
             for (int i = 0; i < 10; i++)
             {
@@ -60,12 +61,14 @@ namespace MyPlayer
                     Lirics = $"New lirics {random.Next(0, 100)}",
                     Album = album,
                     Artist = artist,
-                    Ganre = Ganre.None
+                    Ganre = (Ganre) random.Next(0x0000, 0x4000)
                 });
+
+
+
                 if (i == 5 || i == 9)
                 {
                     songs[i].Like();
-                    //songs[i].Ganre = Ganre.Rock | Ganre.Afro;
                 }
 
                 if(i == 2 || i == 7)

@@ -116,7 +116,8 @@ namespace MyPlayer//.Domain
                             Console.ForegroundColor = ConsoleColor.Red;
                         }
                         
-                        Console.WriteLine($"Player is playing: {item.Name} , {item.Lirics}, {item.Ganre} ");
+                        Console.WriteLine($"Player is playing: {item.Name} , {item.Lirics} ");
+                        item.PrintGanre();
                         Console.ResetColor();
                     }                  
                 }
