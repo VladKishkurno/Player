@@ -101,9 +101,24 @@ namespace MyPlayer//.Domain
 
                 for(int j = 0; j < numLoop; j++)
                 {
-                    foreach(var item in Songs)
-                        Console.WriteLine($"Player is playing: {item.Name} , {item.Lirics} ");
-                                        
+                    foreach (var item in Songs)
+                    {
+                        if (!item.IsLiked.HasValue)
+                        {
+                            Console.ResetColor();
+                        }
+                        else if (item.IsLiked.Value == true)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Green;
+                        }
+                        else
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                        }
+                        
+                        Console.WriteLine($"Player is playing: {item.Name} , {item.Lirics}, {item.Ganre} ");
+                        Console.ResetColor();
+                    }                  
                 }
             }
             else Console.WriteLine($"Player is Locked");

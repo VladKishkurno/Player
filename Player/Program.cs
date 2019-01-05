@@ -59,8 +59,20 @@ namespace MyPlayer
                     Name = $"New song {random.Next(0, 10)}",
                     Lirics = $"New lirics {random.Next(0, 100)}",
                     Album = album,
-                    Artist = artist
+                    Artist = artist,
+                    Ganre = Ganre.None
                 });
+                if (i == 5 || i == 9)
+                {
+                    songs[i].Like();
+                    //songs[i].Ganre = Ganre.Rock | Ganre.Afro;
+                }
+
+                if(i == 2 || i == 7)
+                {
+                    songs[i].Dislike();
+                }
+
                 totalDuration += songs[i].Duration;
                 if (songs[i].Duration < minDuration) minDuration = songs[i].Duration;
                 maxDuration = Math.Max(maxDuration, songs[i].Duration);
