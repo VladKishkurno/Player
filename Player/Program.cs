@@ -57,7 +57,7 @@ namespace MyPlayer
             {
                 songs.Add(new Song
                 { Duration = random.Next(1000),
-                    Name = $"New song {random.Next(0, 10)}",
+                    Name = $"New song {random.Next(0, 10)} agasgdfveqgvavsfvasc",
                     Lirics = $"New lirics {random.Next(0, 100)}",
                     Album = album,
                     Artist = artist,

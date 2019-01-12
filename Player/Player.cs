@@ -116,8 +116,8 @@ namespace MyPlayer//.Domain
                             Console.ForegroundColor = ConsoleColor.Red;
                         }
                         
-                        Console.WriteLine($"Player is playing: {item.Name} , {item.Lirics} ");
-                        item.PrintGanre();
+                        Console.WriteLine($"Player is playing: {item.Name.CutString()} , {item.Lirics} ");
+                        //item.PrintGanre();
                         Console.ResetColor();
                     }                  
                 }
@@ -137,19 +137,7 @@ namespace MyPlayer//.Domain
 
         public void Shuffle()
         {
-            var newSongCollection = new List<Song>();
-
-            for (int i = 0; i < 3; i++)
-            {
-                for (int j = i; j < this.Songs.Count;)
-                {
-                    newSongCollection.Add(this.Songs[j]);
-                    j += 3;
-                }
-            }
-
-            this.Songs = newSongCollection;
-            Console.WriteLine();
+            Songs = this.Songs.Shuffle();
         }
 
         public  void SortByTitle()
