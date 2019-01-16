@@ -101,7 +101,8 @@ namespace MyPlayer//.Domain
 
                 for(int j = 0; j < numLoop; j++)
                 {
-                    foreach (var item in Songs)
+                    foreach (var item 
+                        in Songs)
                     {
                         if (!item.IsLiked.HasValue)
                         {
@@ -116,8 +117,8 @@ namespace MyPlayer//.Domain
                             Console.ForegroundColor = ConsoleColor.Red;
                         }
                         
-                        Console.WriteLine($"Player is playing: {item.Name.CutString()} , {item.Lirics} ");
-                        //item.PrintGanre();
+                        //Console.WriteLine($"Player is playing: {item.Name.CutString()} , {item.Lirics} ");
+                        item.PrintGanre();
                         Console.ResetColor();
                     }                  
                 }
@@ -143,6 +144,23 @@ namespace MyPlayer//.Domain
         public  void SortByTitle()
         {
             this.Songs.Sort();
+        }
+
+        public void FilterByGenre(Ganre ganre)
+        {
+            var newSongCollection = new List<Song>();
+
+            for (int i = 0; i < this.Songs.Count; i++)
+            {
+                if ((this.Songs[i].Ganre & ganre) != 0)
+                {
+                    newSongCollection.Add(this.Songs[i]);
+                }
+
+            }
+
+            Songs = newSongCollection;
+
         }
 
     }

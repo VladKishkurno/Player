@@ -61,20 +61,27 @@ namespace MyPlayer
                     Lirics = $"New lirics {random.Next(0, 100)}",
                     Album = album,
                     Artist = artist,
-                    Ganre = (Ganre) random.Next(0x0000, 0x4000)
-                });
+                    Ganre = (Ganre)  0                });
 
 
 
-                if (i == 5 || i == 9)
+                if (i == 5 || i == 9 || i == 3)
                 {
                     songs[i].Like();
+                    songs[i].Ganre = Ganre.Rock | Ganre.Afro;
                 }
 
-                if(i == 2 || i == 7)
+                if(i == 2 || i == 7 || i == 6)
                 {
                     songs[i].Dislike();
+                    songs[i].Ganre = Ganre.Jazz | Ganre.Folk;
                 }
+
+                if (i == 1 || i == 4 || i == 8)
+                {
+                    songs[i].Ganre = Ganre.Country | Ganre.Easy_listening | Ganre.Rock;
+                }
+
 
                 totalDuration += songs[i].Duration;
                 if (songs[i].Duration < minDuration) minDuration = songs[i].Duration;
@@ -182,19 +189,25 @@ namespace MyPlayer
             player.Play(loop);
 
 
-            Console.WriteLine("Отсортированный");
-            player.SortByTitle();
+            //Console.WriteLine("Отсортированный");
+            //player.SortByTitle();
             //player.Add(SortByTitle(player));
-            Console.WriteLine();
+            //Console.WriteLine();
             //PrintName(player);
-            player.Play(loop);
+            //player.Play(loop);
 
 
-            Console.WriteLine("После перемешивания");
+            //Console.WriteLine("После перемешивания");
             //player.Add(Shuffle(player));
-            player.Shuffle();
+            //player.Shuffle();
+
+            Console.WriteLine("После фильтрации");
+            player.FilterByGenre(Ganre.Rock);
+            
 
             player.Play(loop);
+
+
 
             //PrintName(player);
 

@@ -119,7 +119,26 @@ namespace MyPlayer
             {
                 Console.WriteLine(Ganre.None);
             }
-           // Console.WriteLine();
+            // Console.WriteLine();
+
+            //if (ganre == Ganre.None)  // Алтернативный вариант вывода жанров, рабочий
+            //{
+            //    Console.WriteLine(Ganre.None);
+            //    return;
+            //}
+
+            //int b = 1;
+
+            //for (int i = 0; i < 15; i++)
+            //{
+            //    Ganre r = (Ganre)((int)ganre & b);
+
+            //    if (Ganre.HasFlag(r) && r != Ganre.None)
+            //        Console.WriteLine((Ganre)b);
+
+            //    b = b << 1;
+            //}
+
         }
     }
 }
