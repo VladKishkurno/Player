@@ -165,8 +165,13 @@ namespace MyPlayer
 
         static void Main(string[] args)
         {
+            Skin skin = new ClassicSkin();
+            Skin skin2 = new ColorSkin(ConsoleColor.Green);
+            Skin skin3 = new UpperSkin();
+            Skin skin4 = new ColorSkin(ConsoleColor.DarkMagenta);
             bool loop = false;
-            var player = new Player();
+            
+            var player = new Player(skin);
 
            
 
@@ -185,9 +190,21 @@ namespace MyPlayer
             int maxDuration = 0;
             player.Add(GetSongsDate(ref totalDuration, out maxDuration, out int minDuration));
 
-            Console.WriteLine("Что было создано");
+            Console.WriteLine("Skin 1");
             player.Play(loop);
 
+            Console.WriteLine("Skin 2");
+            player.Skin = skin2;
+            player.Play(loop);
+
+
+            Console.WriteLine("Skin 3");
+            player.Skin = skin3;
+            player.Play(loop);
+
+            Console.WriteLine("Skin 4");
+            player.Skin = skin4;
+            player.Play(loop);
 
             //Console.WriteLine("Отсортированный");
             //player.SortByTitle();
@@ -201,19 +218,14 @@ namespace MyPlayer
             //player.Add(Shuffle(player));
             //player.Shuffle();
 
-            Console.WriteLine("После фильтрации");
-            player.FilterByGenre(Ganre.Rock);
-            
 
-            player.Play(loop);
-
-
+            //player.Play(loop);
 
             //PrintName(player);
 
             //player.Add(SortByTitle(player));
 
-           // player.Play(loop);
+            // player.Play(loop);
             //PrintName(player);
             //song1 = CreateSong();
             //Console.WriteLine($"\nName : {song1.Name} \nDuration : {song1.Duration} \nArtist :{song1.Artist.Name} \nAlbum : {song1.Album.name}");

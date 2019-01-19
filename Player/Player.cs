@@ -8,6 +8,7 @@ namespace MyPlayer//.Domain
 {
     class Player
     {
+        public Skin Skin;
         private int _volume;
         //public Song[] Songarray { get; private set; }
         public List<Song> Songs { get; private set; } = new List<Song>();
@@ -19,6 +20,10 @@ namespace MyPlayer//.Domain
         private const int MIN_VOLUME = 0;
         private const int MAX_VOLUME = 100;
 
+        public Player(Skin skin)
+        {
+            this.Skin = skin;
+        }
         public void Add(List<Song> songs)
         {
              if (Songs == null) Songs = new List<Song>();
@@ -46,14 +51,14 @@ namespace MyPlayer//.Domain
             }
         }
 
-       public void VolumeUp()
+        public void VolumeUp()
         {
             if (_locked != true)
             {
                 Volume++;
-                Console.WriteLine($"Volume is Up: {Volume}");
+                Skin.Render($"Volume is Up: {Volume}");
             }
-            else Console.WriteLine($"Player is Locked");
+            else Skin.Render($"Player is Locked");
         }
 
         public void VolumeDown()
@@ -61,9 +66,9 @@ namespace MyPlayer//.Domain
             if (_locked != true)
             {
                 Volume--;
-                Console.WriteLine($"Volume is Down: {Volume}");
+                Skin.Render($"Volume is Down: {Volume}");
             }
-            else Console.WriteLine($"Player is Locked");
+            else Skin.Render($"Player is Locked");
         }
         
 
@@ -72,21 +77,21 @@ namespace MyPlayer//.Domain
             if (_locked != true)
             {
                 Volume += step;
-                Console.WriteLine($"Volume is Change: {Volume}");
+                Skin.Render($"Volume is Change: {Volume}");
             }
-            else Console.WriteLine($"Player is Locked");
+            else Skin.Render($"Player is Locked");
         }
 
         public void Lock()
         {
             _locked = true;
-            Console.WriteLine($"Player is locked ");
+            Skin.Render($"Player is locked ");
         }
 
         public void UnLock()
         {
             _locked = false;
-            Console.WriteLine($"Player is Unlocked");
+            Skin.Render($"Player is Unlocked");
         }
 
         public void Play(bool loop)
@@ -99,7 +104,8 @@ namespace MyPlayer//.Domain
                 //else numLoop = 5;
                 numLoop = (loop == false) ? 1 : 5;
 
-                for(int j = 0; j < numLoop; j++)
+                Skin.NewScreen();
+                for (int j = 0; j < numLoop; j++)
                 {
                     foreach (var item 
                         in Songs)
@@ -116,14 +122,18 @@ namespace MyPlayer//.Domain
                         {
                             Console.ForegroundColor = ConsoleColor.Red;
                         }
+
                         
+                        Skin.Render($"{item.Name.CutString()} , {item.Lirics}");
                         //Console.WriteLine($"Player is playing: {item.Name.CutString()} , {item.Lirics} ");
-                        item.PrintGanre();
+                        //item.PrintGanre();
+                        
                         Console.ResetColor();
                     }                  
                 }
+                System.Threading.Thread.Sleep(2000);
             }
-            else Console.WriteLine($"Player is Locked");
+            else Skin.Render($"Player is Locked");
         }
 
         public void Stop()
