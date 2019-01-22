@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace MyPlayer
 {
-    public class ClassicSkin : Skin
+    public class ClassicSkin : ISkin
     {
-        public override void NewScreen()
+        public void NewScreen()
         {
             Console.Clear();
         }
 
-        public override void Render(string text)
+        public void Render(string text)
         {
             Console.WriteLine(text);
         }

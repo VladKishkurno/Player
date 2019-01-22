@@ -4,12 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyPlayer
+namespace MyPlayer.videoplayer
 {
-    public interface ISkin
+    public class Video : PlayingItem
     {
-        void NewScreen();
-        void Render(string text);
- 
+        public string Path;
     }
 }

@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace MyPlayer
 {
-    public class Song : IComparable<Song>
+    public class Song : PlayingItem
     {
-        public int Duration;
-        public string Name;
         public string Lirics;
         public Artist Artist;
         public Album Album;

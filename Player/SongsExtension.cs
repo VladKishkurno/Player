@@ -8,20 +8,20 @@ namespace MyPlayer
 {
     public static class SongsExtension
     {
-        public static List<Song> Shuffle(this List<Song> songs)
+        public static List<T> Shuffle<T>(this List<T> items)
         {
-            var newSongCollection = new List<Song>();
+            List<T> newCollection = new List<T>();
 
             for (int i = 0; i < 3; i++)
             {
-                for (int j = i; j < songs.Count;)
+                for (int j = i; j < items.Count;)
                 {
-                    newSongCollection.Add(songs[j]);
+                    newCollection.Add(items[j]);
                     j += 3;
                 }
             }
-            
-            return newSongCollection;
+
+            return newCollection;
         }
     }
 }

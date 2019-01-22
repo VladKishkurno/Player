@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MyPlayer.videoplayer;
 
 namespace MyPlayer
 {
@@ -16,39 +17,6 @@ namespace MyPlayer
             minDuration = 1000;
             maxDuration = 0;
 
-            //artist.Name = "Sabaton";
-            //artist.Ganre = "Rock";
-
-            //var artist = new Artist();
-            //var artist2 = new Artist("Rammstain");
-            //var artist3 = new Artist("Rammstain", "Rock");
-
-            //Console.WriteLine(artist.Name);
-            //Console.WriteLine(artist2.Name);
-            //Console.WriteLine($"{artist3.Name}   {artist3.Ganre}");
-
-            //album.name = "No";
-            //album.year = 2015;
-
-            //var songs = new Song[10];
-
-            //var random = new Random();
-
-
-            //for (int i = 0; i < 10; i++)
-            //{
-            //    var song = new Song
-            //    {
-            //        Duration = random.Next(1000),
-            //        Name = $"New song {i}",
-            //        Album = album,
-            //        Artist = artist
-            //    };
-            //    songs[i] = song;
-            //    totalDuration += song.Duration;
-            //    if (song.Duration < minDuration) minDuration = song.Duration;
-            //    maxDuration = Math.Max(maxDuration, song.Duration);
-            //}
             var songs = new List<Song>();
             var random = new Random();
             var ganres = new List<Ganre> { Ganre.None};
@@ -91,17 +59,37 @@ namespace MyPlayer
             return songs;
         }
 
+        public static List<Video> GetVideoDate()
+        {
+            var videos = new List<Video>();
+            var random = new Random();
+
+            for (int i = 0; i < 10; i++)
+            {
+                videos.Add(new Video
+                {
+                    Duration = random.Next(1000),
+                    Name = ($"New video   {random.Next(0, 10)}   agasgdfveqgvavsfvasc"),
+                    Path = ($"New path   {random.Next(0, 100)}"),
+                }
+                );
+
+            }
+
+            return videos;
+        }
+
         public static void TraceInfo( Player player)
         {
-            Console.WriteLine(player.Songs[0].Artist.Name);
-            Console.WriteLine(player.Songs[0].Duration);
-            Console.WriteLine(player.Songs.Count);
+            Console.WriteLine(player.Items[0].Artist.Name);
+            Console.WriteLine(player.Items[0].Duration);
+            Console.WriteLine(player.Items.Count);
             Console.WriteLine(player.Volume);
         }
 
         public static void PrintName(Player player)
         {
-            foreach(var item in player.Songs)
+            foreach(var item in player.Items)
             Console.WriteLine($" {item.Name} , {item.Lirics}");
         }
 
@@ -165,27 +153,22 @@ namespace MyPlayer
 
         static void Main(string[] args)
         {
-            Skin skin = new ClassicSkin();
-            Skin skin2 = new ColorSkin(ConsoleColor.Green);
-            Skin skin3 = new UpperSkin();
-            Skin skin4 = new ColorSkin(ConsoleColor.DarkMagenta);
+            ISkin skin = new ClassicSkin();
+            ISkin skin2 = new ColorSkin(ConsoleColor.Green);
+            ISkin skin3 = new UpperSkin();
+            ISkin skin4 = new ColorSkin(ConsoleColor.DarkMagenta);
             bool loop = false;
             
             var player = new Player(skin);
+            var videoPlayer = new VideoPlayer(skin);
 
-           
+
 
             var artist = new Artist();
             var album = new Album();
             List<Song> songs = new List<Song>();
             
-            //songs.Add(CreateSong());
-           // songs.Add(CreateSong("Named song"));
-           // songs.Add(CreatSong("Named song 2", 123, album, artist));
 
-            //player.Add(songs);
-
-            //TestVolume(player); // 
             int totalDuration = 0;
             int maxDuration = 0;
             player.Add(GetSongsDate(ref totalDuration, out maxDuration, out int minDuration));
@@ -196,6 +179,10 @@ namespace MyPlayer
             Console.WriteLine("Skin 2");
             player.Skin = skin2;
             player.Play(loop);
+            player.Lock();
+            System.Threading.Thread.Sleep(1000);
+            player.UnLock();
+            System.Threading.Thread.Sleep(1000);
 
 
             Console.WriteLine("Skin 3");
@@ -206,61 +193,53 @@ namespace MyPlayer
             player.Skin = skin4;
             player.Play(loop);
 
-            //Console.WriteLine("Отсортированный");
-            //player.SortByTitle();
-            //player.Add(SortByTitle(player));
-            //Console.WriteLine();
-            //PrintName(player);
-            //player.Play(loop);
+            System.Threading.Thread.Sleep(1000);
+            player.Shuffle();
+            player.Play(loop);
+            System.Threading.Thread.Sleep(1000);
+
+            player.SortByTitle();
+            player.Play(loop);
+            System.Threading.Thread.Sleep(1000);
+
+            player.FilterByGenre(Ganre.Rock);
+            player.Play(loop);
+            System.Threading.Thread.Sleep(1000);
 
 
-            //Console.WriteLine("После перемешивания");
-            //player.Add(Shuffle(player));
-            //player.Shuffle();
+            //video test
 
 
-            //player.Play(loop);
+            videoPlayer.Add(GetVideoDate());
 
-            //PrintName(player);
+            Console.WriteLine("Skin 1");
+            videoPlayer.Play(loop);
 
-            //player.Add(SortByTitle(player));
-
-            // player.Play(loop);
-            //PrintName(player);
-            //song1 = CreateSong();
-            //Console.WriteLine($"\nName : {song1.Name} \nDuration : {song1.Duration} \nArtist :{song1.Artist.Name} \nAlbum : {song1.Album.name}");
-            //song2 = CreateSong("Named song");
-            //Console.WriteLine($"\nName : {song2.Name} \nDuration : {song2.Duration} \nArtist : {song2.Artist.Name} \nAlbum : {song2.Album.name}");
-            //song3 = CreatSong("Named song 2", 123, album, artist);
-            //song3.Lirics = "Lirics";
-            //Console.WriteLine($"\nName : {song3.Name} \nDuration : {song3.Duration} \nArtist : {song3.Artist.Name} \nAlbum : {song3.Album.name}");
+            Console.WriteLine("Skin 2");
+            videoPlayer.Skin = skin2;
+            videoPlayer.Play(loop);
+            videoPlayer.Lock();
+            System.Threading.Thread.Sleep(1000);
+            videoPlayer.UnLock();
+            System.Threading.Thread.Sleep(1000);
 
 
+            Console.WriteLine("Skin 3");
+            videoPlayer.Skin = skin3;
+            videoPlayer.Play(loop);
 
-            //player.Add(song1);
-            //player.Add(song1, song2);
-            //player.Add(song1, song2, song3);
-            //player.Play();
-            // CreateSAA();
-            //var song = new Song();
+            Console.WriteLine("Skin 4");
+            videoPlayer.Skin = skin4;
+            videoPlayer.Play(loop);
 
-            //// player.Play();
-            //Console.WriteLine(player.Volume);
-            //// //player.Volume = 20;
+            System.Threading.Thread.Sleep(1000);
+            videoPlayer.Shuffle();
+            videoPlayer.Play(loop);
+            System.Threading.Thread.Sleep(1000);
 
-            // player.Play();
-            // player.VolumeUp(player);
-            //Console.WriteLine(player.Volume);
-            //// Console.WriteLine(player.Volume);
-            //player.VolumeChage(300);
-            // Console.WriteLine(player.Volume);
-            // player.Stop();
-            ////// TraceInfo(player);
-
-
-
-            //player.Playing = false;
-
+            videoPlayer.SortByTitle();
+            videoPlayer.Play(loop);
+            System.Threading.Thread.Sleep(1000);
 
             Console.ReadKey();
         }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MyPlayer
 {
-    class ColorSkin : Skin
+    class ColorSkin : ISkin
     {
         private ConsoleColor _color;
 
@@ -14,14 +14,14 @@ namespace MyPlayer
         {
             _color = Color;
         }
-        public override void NewScreen()
+        public void NewScreen()
         {
             Console.Clear();
         }
 
 
 
-        public override void Render(string text)
+        public void Render(string text)
         {
             if (Console.ForegroundColor == _color && Console.ForegroundColor == ConsoleColor.Red)  // это меняет цвет текста, когда цвет фона 
             {                                                                                     //совпадает с цветом отображения Like DisLike
@@ -41,8 +41,9 @@ namespace MyPlayer
             {
                 Console.ForegroundColor = _color;
                 Console.WriteLine(text);
+                
             }
-
+            Console.ResetColor();
         }
 
     }

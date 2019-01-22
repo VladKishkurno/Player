@@ -48,7 +48,9 @@
     <Compile Include="ClassicSkin.cs" />
     <Compile Include="ColorSkin.cs" />
     <Compile Include="Ganre.cs" />
+    <Compile Include="GenericPlayer.cs" />
     <Compile Include="Player.cs" />
+    <Compile Include="PlayingItem.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Skin.cs" />
@@ -56,6 +58,8 @@
     <Compile Include="SongsExtension.cs" />
     <Compile Include="StringExtention.cs" />
     <Compile Include="UpperSkin.cs" />
+    <Compile Include="videoplayer\Video.cs" />
+    <Compile Include="videoplayer\VideoPlayer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
