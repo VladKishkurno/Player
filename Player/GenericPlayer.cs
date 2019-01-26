@@ -31,6 +31,12 @@ namespace MyPlayer
         //    Items.AddRange(items);
         //}
 
+        public void Clear()
+        {
+           Items?.RemoveRange(0, Items.Count);
+        }
+
+
         public bool Locked
         {
             get

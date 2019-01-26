@@ -18,13 +18,32 @@ namespace MyPlayer
             ISkin skin3 = new UpperSkin();
             ISkin skin4 = new ColorSkin(ConsoleColor.DarkMagenta);
             bool loop = false;
-            
-            var videoPlayer = new VideoPlayer(skin);
+
+            var player = new Player(skin);
 
             var artist = new Artist();
             var album = new Album();
             List<Song> songs = new List<Song>();
-            
+
+            //player.Clear();
+
+            string path = "D://Download/Bring Me the Horizon";
+            player.Load(path);
+
+            string pathXML = "C://Users/User/Desktop/Player/Player/Player.xml";
+
+            player.SaveAsPlaylist(pathXML);
+            player.Clear();
+            player.LoadPlaylist(pathXML);
+            player.Play(loop);
+
+            string pathXML2 = "C://Users/User/Desktop/Player/Player/MyPlayer.xml";
+            player.Shuffle();
+            player.SaveAsPlaylist(pathXML2);
+            player.Clear();
+            player.Play(loop);
+            player.LoadPlaylist(pathXML2);
+            player.Play(loop);
 
             //Console.WriteLine("Skin 1");
             //player.Play(loop);

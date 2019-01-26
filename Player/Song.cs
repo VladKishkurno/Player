@@ -11,6 +11,7 @@ namespace MyPlayer
         public string Lirics;
         public Artist Artist;
         public Album Album;
+        public string Path;
 
         public Ganre Ganre;
 

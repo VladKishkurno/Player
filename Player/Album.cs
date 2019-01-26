@@ -10,11 +10,17 @@ namespace MyPlayer
     {
        public byte[] thumbnail;
        public string name;
-       public int year;
+       public uint year;
 
         public Album ()
         {
             this.name = "DefaultName";
+        }
+
+        public Album ( string name, uint year)
+        {
+            this.name = name;
+            this.year = year;
         }
     }
 }

@@ -8,7 +8,7 @@ namespace MyPlayer
 {
     public class PlayingItem : IComparable<PlayingItem>
     {
-        public int Duration;
+        public double Duration;
         public string Name;
 
         public int CompareTo(PlayingItem comparePart)
