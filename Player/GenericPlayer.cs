@@ -25,12 +25,11 @@ namespace MyPlayer
             this.Skin = skin;
         }
 
-        public void Add(List<T> items)
-        {
-            if (Items == null) Items = new List<T>();
-            Items.AddRange(items);
-
-        }
+        //public void Add(List<T> items)
+        //{
+        //    if (Items == null) Items = new List<T>();
+        //    Items.AddRange(items);
+        //}
 
         public bool Locked
         {
