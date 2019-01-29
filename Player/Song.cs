@@ -3,20 +3,36 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Media;
 
 namespace MyPlayer
 {
-    public class Song : PlayingItem
+    public class Song : PlayingItem/*, IDisposable*/
     {
         public string Lirics;
         public Artist Artist;
         public Album Album;
         public string Path;
 
+        
         public Ganre Ganre;
 
         protected bool? _isLiked = null;
 
+        //public void Dispose()
+        //{
+        //    Lirics = null;
+        //    Path = null;
+        //    Artist.Dispose();
+        //    Artist = null;
+        //    Album.Dispose();
+        //    Album = null;
+        //}
+
+        //~Song()
+        //{
+        //    Dispose();
+        //}
         //public void Add(List<Ganre> ganres)
         //{
         //    if (Ganres == null) Ganres = new List<Ganre>();
@@ -139,5 +155,6 @@ namespace MyPlayer
             //}
 
         }
+
     }
 }

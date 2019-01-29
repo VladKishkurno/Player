@@ -19,32 +19,32 @@ namespace MyPlayer
             ISkin skin4 = new ColorSkin(ConsoleColor.DarkMagenta);
             bool loop = false;
 
-            var player = new Player(skin);
+            using (var player = new Player(skin))
+            {
+                var artist = new Artist();
+                var album = new Album();
+                List<Song> songs = new List<Song>();
 
-            var artist = new Artist();
-            var album = new Album();
-            List<Song> songs = new List<Song>();
+                //player.Clear();
 
-            //player.Clear();
+                string path = $@"D:\Download\[sound effects] Sega MegaDrive SFX - 316 Game Samples\Mortal Kombat";
+                player.Load(path);
 
-            string path = "D://Download/Bring Me the Horizon";
-            player.Load(path);
+                string pathXML = "C://Users/User/Desktop/Player/Player/Player.xml";
 
-            string pathXML = "C://Users/User/Desktop/Player/Player/Player.xml";
+                player.SaveAsPlaylist(pathXML);
+                //player.Clear();
+                //player.LoadPlaylist(pathXML);
+                player.Play(loop);
 
-            player.SaveAsPlaylist(pathXML);
-            player.Clear();
-            player.LoadPlaylist(pathXML);
-            player.Play(loop);
-
-            string pathXML2 = "C://Users/User/Desktop/Player/Player/MyPlayer.xml";
-            player.Shuffle();
-            player.SaveAsPlaylist(pathXML2);
-            player.Clear();
-            player.Play(loop);
-            player.LoadPlaylist(pathXML2);
-            player.Play(loop);
-
+                //string pathXML2 = "C://Users/User/Desktop/Player/Player/MyPlayer.xml";
+                //player.Shuffle();
+                //player.SaveAsPlaylist(pathXML2);
+                //player.Clear();
+                //player.Play(loop);
+                //player.LoadPlaylist(pathXML2);
+                //player.Play(loop);
+            }
             //Console.WriteLine("Skin 1");
             //player.Play(loop);
 

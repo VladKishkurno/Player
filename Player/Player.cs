@@ -7,11 +7,40 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using TagLib;
 using TagLib.Mpeg;
+using System.Media;
 
 namespace MyPlayer//.Domain
 {
-    class Player : GenericPlayer<Song>
+    class Player : GenericPlayer<Song>, IDisposable
     {
+        private SoundPlayer soundPlayer = new SoundPlayer();
+
+        private bool disposed = false;
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposed)
+            {
+                if (disposing)
+                {
+                    Skin = null;
+                    Clear();  // удаляю playlist
+                    Items = null; // удаляю ссылку на объект
+                }
+                soundPlayer?.Dispose();
+                disposed = true;
+            }
+        }
+        ~Player()
+        {
+            Dispose(false);
+        }
+
+
         public Player(ISkin skin) : base(skin)
         {
 
@@ -35,20 +64,12 @@ namespace MyPlayer//.Domain
                 {
                     foreach (var item in Items)
                     {
-                        if (!item.IsLiked.HasValue)
-                        {
-                            Console.ResetColor();
-                        }
-                        else if (item.IsLiked.Value == true)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Green;
-                        }
-                        else
-                        {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                        }
 
-                        Skin.Render($"{item.Name.CutString()}  {item.Artist.Name}");
+                        ViewPlayList(item);
+
+                        soundPlayer.SoundLocation = item.Path;
+                        soundPlayer.PlaySync();
+                        soundPlayer.Play();
 
                         Console.ResetColor();
                     }
@@ -78,18 +99,18 @@ namespace MyPlayer//.Domain
         public void Load(string path)
         {
             var dirInfo = new DirectoryInfo(path);
-            var files = dirInfo.GetFiles("*.mp3");
+            var files = dirInfo.GetFiles("*.wav");
 
             if (Items == null) Items = new List<Song>();
 
             foreach (var item in files)
             {
-                AudioFile audio = new AudioFile(item.FullName, ReadStyle.Average);
+                //AudioFile audio = new AudioFile(item.FullName, ReadStyle.Average);
+                SoundPlayer soundPlayer = new SoundPlayer(item.FullName);
+                var artist = new Artist();// audio.Tag.FirstPerformer);
+                var album = new Album();// audio.Tag.Album, audio.Tag.Year);
 
-                var artist = new Artist(audio.Tag.FirstPerformer);
-                var album = new Album(audio.Tag.Album, audio.Tag.Year);
-
-                Items.Add(new Song { Name = item.Name, Album = album, Artist = artist, Duration = audio.Properties.Duration.TotalMinutes, Path = item.FullName, Lirics = audio.Tag.Lyrics }); 
+                Items.Add(new Song { Name = item.Name, Album = album, Artist = artist, /*Duration = audio.Properties.Duration.TotalMinutes*/ Path = item.FullName/*, Lirics = audio.Tag.Lyrics*/ }); 
             }
         }
 
@@ -113,6 +134,36 @@ namespace MyPlayer//.Domain
             }
         }
 
+        public void ViewPlayList(Song thisPlaySong)
+        {
+            Skin.NewScreen();
 
+            foreach (var item in Items)
+            {
+                if (!item.IsLiked.HasValue)
+                {
+                    Console.ResetColor();
+                }
+                else if (item.IsLiked.Value == true)
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                }
+                
+                if(thisPlaySong == item)
+                {
+                    Skin.Render($"***{item.Name.CutString()}  {item.Artist.Name}***");
+                }
+                else
+                {
+                    Skin.Render($"{item.Name.CutString()}  {item.Artist.Name}");
+                }
+
+                Console.ResetColor();
+            }
+        }
     }
 }

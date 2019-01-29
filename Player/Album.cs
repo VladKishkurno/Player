@@ -6,11 +6,20 @@ using System.Threading.Tasks;
 
 namespace MyPlayer
 {
-  public  class Album
+  public  class Album /*: IDisposable*/
     {
        public byte[] thumbnail;
        public string name;
        public uint year;
+
+        //~Album()
+        //{
+        //    Dispose();
+        //}
+        //public void Dispose()
+        //{
+        //    name = null;
+        //}
 
         public Album ()
         {

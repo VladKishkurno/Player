@@ -6,11 +6,20 @@ using System.Threading.Tasks;
 
 namespace MyPlayer
 {
-    public class Artist
+    public class Artist /*: IDisposable*/
     {
         public string Name;
         public string Ganre;
 
+        //~Artist()
+        //{
+        //    Dispose();
+        //}
+        //public void Dispose()
+        //{
+        //    Name = null;
+        //    Ganre = null;
+        //}
 
         public Artist()
         {
@@ -28,7 +37,6 @@ namespace MyPlayer
             this.Ganre = ganre;
         }
 
-        ~ Artist() { }
     }
 
 
