@@ -9,18 +9,19 @@ namespace MyPlayer
 {
     class Program
     {
-
-
         static void Main(string[] args)
         {
-            ISkin skin = new ClassicSkin();
-            ISkin skin2 = new ColorSkin(ConsoleColor.Green);
-            ISkin skin3 = new UpperSkin();
-            ISkin skin4 = new ColorSkin(ConsoleColor.DarkMagenta);
             bool loop = false;
 
-            using (var player = new Player(skin))
+            using (var player = new Player())
             {
+                player.SongStartedEvent += ShowInfo;
+                player.SongsListChangedEvent += ShowInfo;
+                player.PlayerLockedEvent += Show;
+                player.PlayerUnlockedEvent += Show;
+                player.PlayerStoppedEvent += Show;
+                player.PlayerStartedEvent += ShowInfo;
+                player.VolumeChangeEvent += Show;
                 var artist = new Artist();
                 var album = new Album();
                 List<Song> songs = new List<Song>();
@@ -30,58 +31,48 @@ namespace MyPlayer
                 string path = $@"D:\Download\[sound effects] Sega MegaDrive SFX - 316 Game Samples\Mortal Kombat";
                 player.Load(path);
 
-                string pathXML = "C://Users/User/Desktop/Player/Player/Player.xml";
+                //string pathXML = "C://Users/User/Desktop/Player/Player/Player.xml";
 
-                player.SaveAsPlaylist(pathXML);
-                //player.Clear();
-                //player.LoadPlaylist(pathXML);
+                //player.SaveAsPlaylist(pathXML);
                 player.Play(loop);
-
-                //string pathXML2 = "C://Users/User/Desktop/Player/Player/MyPlayer.xml";
-                //player.Shuffle();
-                //player.SaveAsPlaylist(pathXML2);
-                //player.Clear();
-                //player.Play(loop);
-                //player.LoadPlaylist(pathXML2);
-                //player.Play(loop);
+                player.VolumeUp();
+                player.Play(loop);
+                player.Lock();
+                player.Play(loop);
+                player.UnLock();
             }
-            //Console.WriteLine("Skin 1");
-            //player.Play(loop);
-
-            //Console.WriteLine("Skin 2");
-            //player.Skin = skin2;
-            //player.Play(loop);
-            //player.Lock();
-            //System.Threading.Thread.Sleep(1000);
-            //player.UnLock();
-            //System.Threading.Thread.Sleep(1000);
-
-
-            //Console.WriteLine("Skin 3");
-            //player.Skin = skin3;
-            //player.Play(loop);
-
-            //Console.WriteLine("Skin 4");
-            //player.Skin = skin4;
-            //player.Play(loop);
-
-            //System.Threading.Thread.Sleep(1000);
-            //player.Shuffle();
-            //player.Play(loop);
-            //System.Threading.Thread.Sleep(1000);
-
-            //player.SortByTitle();
-            //player.Play(loop);
-            //System.Threading.Thread.Sleep(1000);
-
-            //player.FilterByGenre(Ganre.Rock);
-            //player.Play(loop);
-            //System.Threading.Thread.Sleep(1000);
 
             Console.ReadKey();
         }
 
-        
+        private static void Show(List<Song> songs, bool locked, int volume, bool playing)
+        {
+            ShowInfo(songs, null, locked, volume, playing);
+        }
+        private static void ShowInfo(List<Song> songs, Song playingSong, bool locked, int volume, bool playing)
+        {
+            Console.Clear();// remove old data
+
+            //Render the list of songs
+                foreach (var song in songs)
+                {
+                    if (playingSong == song)
+                    {
+                        Console.ForegroundColor = ConsoleColor.DarkRed;
+                        Console.WriteLine(song.Name);//Render current song in other color.
+                        Console.ResetColor();
+                    }
+                    else
+                    {
+                        Console.WriteLine(song.Name);
+                    }
+                }
+
+            //Render status bar
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            Console.WriteLine($"Volume is: {volume}. Locked: {locked}. Player is play: {playing}");
+            Console.ResetColor();
+        }
     }
 
 

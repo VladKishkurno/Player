@@ -8,10 +8,10 @@ namespace MyPlayer.videoplayer
 {
     public class VideoPlayer : GenericPlayer<Video>
     {
-        public VideoPlayer(ISkin skin) : base(skin)
-        {
+        //public VideoPlayer(ISkin skin) : base(skin)
+        //{
 
-        }
+        //}
 
         public override void Play(bool loop)
         {
@@ -21,20 +21,20 @@ namespace MyPlayer.videoplayer
                
                 numLoop = (loop == false) ? 1 : 5;
 
-                Skin.NewScreen();
+                //Skin.NewScreen();
                 for (int j = 0; j < numLoop; j++)
                 {
                     foreach (var item
                         in Items)
                     {
-                        Skin.Render(item.Name.CutString() + item.Path);
+                        //Skin.Render(item.Name.CutString() + item.Path);
 
                         Console.ResetColor();
                     }
                 }
                 System.Threading.Thread.Sleep(2000);
             }
-            else Skin.Render("Player is Locked");
+            //else Skin.Render("Player is Locked");
         }
     }
 }

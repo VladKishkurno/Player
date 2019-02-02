@@ -8,7 +8,12 @@ namespace MyPlayer
 {
     public abstract class GenericPlayer<T>
     {
-        public ISkin Skin;
+        public event Action<List<T>, bool, int, bool> VolumeChangeEvent;
+        public event Action<List<T>, bool, int, bool> PlayerLockedEvent;
+        public event Action<List<T>, bool, int, bool> PlayerUnlockedEvent;
+        
+        public event Action<List<T>, bool, int, bool> PlayerStoppedEvent;
+        //public ISkin Skin;
         private int _volume;
         //public Song[] Songarray { get; private set; }
         public List<T> Items { get; protected set; }
@@ -20,10 +25,10 @@ namespace MyPlayer
         private const int MIN_VOLUME = 0;
         private const int MAX_VOLUME = 100;
 
-        protected GenericPlayer(ISkin skin)
-        {
-            this.Skin = skin;
-        }
+        //protected GenericPlayer(ISkin skin)
+        //{
+        //    this.Skin = skin;
+        //}
 
         //public void Add(List<T> items)
         //{
@@ -51,6 +56,11 @@ namespace MyPlayer
             {
                 return _playing;
             }
+
+            protected set
+            {
+                _playing = value;
+            }
         }
         public int Volume
         {
@@ -71,9 +81,11 @@ namespace MyPlayer
             if (_locked != true)
             {
                 Volume++;
-                Skin.Render($"Volume is Up:   {Volume}");
+                //Skin.Render($"Volume is Up:   {Volume}");
+                VolumeChangeEvent?.Invoke(Items, _locked, _volume, _playing);
+                //SongStartedEvent?.Invoke(Items, item, Locked, Volume);
             }
-            else Skin.Render("Player is Locked");
+            //else Skin.Render("Player is Locked");
         }
 
         public void VolumeDown()
@@ -81,9 +93,10 @@ namespace MyPlayer
             if (_locked != true)
             {
                 Volume--;
-                Skin.Render($"Volume is Down:  {Volume}");
+                //Skin.Render($"Volume is Down:  {Volume}");
+                VolumeChangeEvent?.Invoke(Items, _locked, _volume, _playing);
             }
-            else Skin.Render("Player is Locked");
+            //else Skin.Render("Player is Locked");
         }
 
 
@@ -92,34 +105,37 @@ namespace MyPlayer
             if (_locked != true)
             {
                 Volume += step;
-                Skin.Render("Volume is Change:  {Volume}");
+                // Skin.Render("Volume is Change:  {Volume}");
+                VolumeChangeEvent?.Invoke(Items, _locked, _volume, _playing);
             }
-            else Skin.Render("Player is Locked");
+           // else Skin.Render("Player is Locked");
         }
 
         public void Lock()
         {
             _locked = true;
-            Skin.Render("Player is locked ");
+            PlayerLockedEvent?.Invoke(Items, _locked, _volume, _playing);
+            // Skin.Render("Player is locked ");
         }
 
         public void UnLock()
         {
             _locked = false;
-            Skin.Render("Player is Unlocked");
+            PlayerUnlockedEvent?.Invoke(Items, _locked, _volume, _playing);
+            // Skin.Render("Player is Unlocked");
         }
 
         public abstract void Play(bool loop);
-
 
         public void Stop()
         {
             if (_locked != true)
             {
                 _playing = false;
-                Console.WriteLine("Player is stoped");
+                PlayerStoppedEvent?.Invoke(Items, _locked, _volume, _playing);
+                //Console.WriteLine("Player is stoped");
             }
-            else Console.WriteLine("Player is Locked");
+            //else Console.WriteLine("Player is Locked");
         }
 
         public void Shuffle()
