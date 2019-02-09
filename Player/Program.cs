@@ -22,6 +22,8 @@ namespace MyPlayer
                 player.PlayerStoppedEvent += Show;
                 player.PlayerStartedEvent += ShowInfo;
                 player.VolumeChangeEvent += Show;
+                player.OnError += Error;
+                player.OnWarning += Error;
                 var artist = new Artist();
                 var album = new Album();
                 List<Song> songs = new List<Song>();
@@ -29,20 +31,27 @@ namespace MyPlayer
                 //player.Clear();
 
                 string path = $@"D:\Download\[sound effects] Sega MegaDrive SFX - 316 Game Samples\Mortal Kombat";
-                player.Load(path);
+                
 
                 //string pathXML = "C://Users/User/Desktop/Player/Player/Player.xml";
 
                 //player.SaveAsPlaylist(pathXML);
-                player.Play(loop);
-                player.VolumeUp();
-                player.Play(loop);
-                player.Lock();
-                player.Play(loop);
-                player.UnLock();
+                PlaySong(player, loop, path);
+
+                //player.VolumeUp();
+                //PlaySong(player, loop, path);
+                //player.Lock();
+                ////player.Play(loop);
+                //player.UnLock();
             }
 
             Console.ReadKey();
+        }
+
+        private static async void PlaySong(Player player, bool loop, string path)
+        {
+            await player.Load(path);
+            await player.Play(loop);          
         }
 
         private static void Show(List<Song> songs, bool locked, int volume, bool playing)
@@ -50,11 +59,10 @@ namespace MyPlayer
             ShowInfo(songs, null, locked, volume, playing);
         }
         private static void ShowInfo(List<Song> songs, Song playingSong, bool locked, int volume, bool playing)
-        {
+        {  
             Console.Clear();// remove old data
-
             //Render the list of songs
-                foreach (var song in songs)
+            foreach (var song in songs)
                 {
                     if (playingSong == song)
                     {
@@ -67,10 +75,17 @@ namespace MyPlayer
                         Console.WriteLine(song.Name);
                     }
                 }
-
             //Render status bar
             Console.ForegroundColor = ConsoleColor.DarkGreen;
             Console.WriteLine($"Volume is: {volume}. Locked: {locked}. Player is play: {playing}");
+            Console.ResetColor();
+        }
+
+        public static void Error(string message)
+        {
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.WriteLine(message);
             Console.ResetColor();
         }
     }

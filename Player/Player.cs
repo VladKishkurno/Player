@@ -16,6 +16,8 @@ namespace MyPlayer//.Domain
         public event Action<List<Song>, Song, bool, int, bool> SongsListChangedEvent;
         public event Action<List<Song>, Song, bool, int, bool> SongStartedEvent;
         public event Action<List<Song>, Song, bool, int, bool> PlayerStartedEvent;
+        public event Action<string> OnError;
+        public event Action<string> OnWarning;
 
         private SoundPlayer soundPlayer = new SoundPlayer();
 
@@ -50,43 +52,69 @@ namespace MyPlayer//.Domain
 
         //}
 
-        public override void Play(bool loop)
+        public override Task<bool> Play(bool loop)
         {
-            if (!Locked && Items.Count > 0)
-            {
-                Playing = true;
-                PlayerStartedEvent?.Invoke(Items, null, Locked, Volume, Playing);
-            }
-
-            if (Playing)
-            {
-                int numLoop = 0;
-
-                numLoop = (loop == false) ? 1 : 5;
-
-                //Skin.NewScreen();
-                
-                for (int j = 0; j < numLoop; j++)
+           
+                return Task.Run(() =>
                 {
-                    foreach (var item in Items)
+                    if (!Locked && Items.Count > 0)
                     {
-                        ViewPlayList(item);
-
-                        SongStartedEvent?.Invoke(Items, item, Locked, Volume, Playing);
-                        
-                        soundPlayer.SoundLocation = item.Path;
-                        soundPlayer.PlaySync();
-                        //soundPlayer.Play();
-
-                        Console.ResetColor();
+                        Playing = true;
+                        PlayerStartedEvent?.Invoke(Items, null, Locked, Volume, Playing);
                     }
-                }
 
-                Playing = false;
-                System.Threading.Thread.Sleep(2000);
-            }
+                    if (Playing)
+                    {
+                        int numLoop = 0;
+
+                        numLoop = (loop == false) ? 1 : 5;
+
+                        //Skin.NewScreen();
+                       
+                            for (int j = 0; j < numLoop; j++)
+                        {
+                            foreach (var item in Items)
+                            {
+                                try
+                                {
+                                    ViewPlayList(item);
+
+                                SongStartedEvent?.Invoke(Items, item, Locked, Volume, Playing);
+
+                                soundPlayer.SoundLocation = item.Path;
+                                soundPlayer.PlaySync();
+                                    //soundPlayer.Play();
+                                }
+                                catch (FileNotFoundException)
+                                {
+                                    OnWarning?.Invoke("Файл не найден");
+                                    throw new FailedToPlayException("Файл не найден", item.Path);
+                                }
+                                catch (InvalidOperationException)
+                                {
+                                    OnWarning?.Invoke("Проверте расширение файла");
+                                    throw new System.Exception("Проверте расширение файла");
+                                }
+                                Console.ResetColor();
+                            }
+                        }
+                        
+                        Playing = false;
+                        System.Threading.Thread.Sleep(2000);
+                    }
+                    return Playing;
+                });
+           
             //else Skin.Render("Player is Locked");
         }
+
+        //private Task PlaySong(string path)
+        //{
+        //    return Task.Run(() =>
+        //    {
+                
+        //    });
+        //}
 
         public void FilterByGenre(Ganre ganre)
         {
@@ -105,23 +133,26 @@ namespace MyPlayer//.Domain
 
         }
 
-        public void Load(string path)
+        public Task Load(string path)
         {
-            var dirInfo = new DirectoryInfo(path);
-            var files = dirInfo.GetFiles("*.wav");
-
-            if (Items == null) Items = new List<Song>();
-
-            foreach (var item in files)
+            return Task.Run(() =>
             {
-                //AudioFile audio = new AudioFile(item.FullName, ReadStyle.Average);
-                SoundPlayer soundPlayer = new SoundPlayer(item.FullName);
-                var artist = new Artist();// audio.Tag.FirstPerformer);
-                var album = new Album();// audio.Tag.Album, audio.Tag.Year);
+                var dirInfo = new DirectoryInfo(path);
+                var files = dirInfo.GetFiles("*.wav");
 
-                Items.Add(new Song { Name = item.Name, Album = album, Artist = artist, /*Duration = audio.Properties.Duration.TotalMinutes*/ Path = item.FullName/*, Lirics = audio.Tag.Lyrics*/ });
-                SongsListChangedEvent?.Invoke(Items, null, Locked, Volume, Playing);
-            }
+                if (Items == null) Items = new List<Song>();
+
+                foreach (var item in files)
+                {
+                    //AudioFile audio = new AudioFile(item.FullName, ReadStyle.Average);
+                    SoundPlayer soundPlayer = new SoundPlayer(item.FullName);
+                    var artist = new Artist();// audio.Tag.FirstPerformer);
+                    var album = new Album();// audio.Tag.Album, audio.Tag.Year);
+
+                    Items.Add(new Song { Name = item.Name, Album = album, Artist = artist, /*Duration = audio.Properties.Duration.TotalMinutes*/ Path = item.FullName/*, Lirics = audio.Tag.Lyrics*/ });
+                    SongsListChangedEvent?.Invoke(Items, null, Locked, Volume, Playing);
+                }
+            });
         }
 
         public void SaveAsPlaylist(string path)

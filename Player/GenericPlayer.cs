@@ -125,7 +125,7 @@ namespace MyPlayer
             // Skin.Render("Player is Unlocked");
         }
 
-        public abstract void Play(bool loop);
+        public abstract Task<bool> Play(bool loop);
 
         public void Stop()
         {

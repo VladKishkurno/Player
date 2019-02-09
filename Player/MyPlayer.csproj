@@ -53,9 +53,11 @@
     <Compile Include="Artist.cs" />
     <Compile Include="ClassicSkin.cs" />
     <Compile Include="ColorSkin.cs" />
+    <Compile Include="FailedToPlayException.cs" />
     <Compile Include="Ganre.cs" />
     <Compile Include="GenericPlayer.cs" />
     <Compile Include="Player.cs" />
+    <Compile Include="PlayerException.cs" />
     <Compile Include="PlayingItem.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
